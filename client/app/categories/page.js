@@ -1,4 +1,5 @@
-import React from "react";
+'use client';
+import React, { useEffect, useRef, useState } from "react";
 import SearchFilter from "./SearchFilter";
 import ItemDisplay from "./ItemDisplay";
 
@@ -15,10 +16,37 @@ const Categories = [
 ];
 
 export default function categories() {
+    const [isPressed, setIsPressed] = useState(false);
+    const searchFilterRef = useRef(null);
+
+    const toggleOverlay = () => {
+        setIsPressed(!isPressed);
+    }
+
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (searchFilterRef.current && !searchFilterRef.current.contains(event.target)) {
+                setIsPressed(false);
+            }
+        };
+
+        if (isPressed) {
+            document.addEventListener("mousedown", handleClickOutside);
+        } else {
+            document.removeEventListener("mousedown", handleClickOutside);
+        }
+
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [isPressed]);
+
     return (
         <>
-            <SearchFilter Categories={Categories} />
-            <ItemDisplay />
+            <div ref={searchFilterRef} className={`${isPressed? 'block': 'hidden'} w-2/4 absolute md:relative md:block md:w-1/4 block p-4 border-r border-gray-200 bg-white z-10`}>
+                <SearchFilter Categories={Categories} Visible={isPressed} />
+            </div>
+            <ItemDisplay onPress={toggleOverlay} Visible={isPressed} />
         </>
     );
 }

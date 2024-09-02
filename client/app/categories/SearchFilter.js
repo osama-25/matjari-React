@@ -15,9 +15,8 @@ const SearchFilter = ({ Categories }) => {
 
     const visibleCategories = showMore ? Categories : Categories.slice(0, 4);
     return (
-        <div className="hidden md:block p-4 border-r border-gray-200 w-1/4">
+        <>
             <h3 className="text-lg font-semibold mb-4">Filters</h3>
-
             <div className="mb-6 flex flex-col gap-2 mx-2">
                 <h4 className="text-md font-bold mb-2">Categories</h4>
                 {visibleCategories.map(category => (
@@ -60,7 +59,7 @@ const SearchFilter = ({ Categories }) => {
                     <option value="chicago">Chicago</option>
                 </select>
             </div>
-        </div>
+        </>
     );
 }
 export default SearchFilter

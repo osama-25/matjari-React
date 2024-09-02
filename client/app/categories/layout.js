@@ -6,7 +6,7 @@ export default function CatLayout({ children }) {
     return (
         <>
             <NavBar />
-            <div className="flex flex-row">
+            <div className="flex flex-row relative">
                 {children}
             </div>
         </>

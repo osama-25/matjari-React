@@ -1,31 +1,27 @@
 "use client";
 
 import axios from 'axios';
-import 'bootstrap/dist/css/bootstrap.css';
 import { useEffect, useState } from 'react';
-import Button from 'react-bootstrap/Button';
-import Col from 'react-bootstrap/Col';
-import Form from 'react-bootstrap/Form';
-import InputGroup from 'react-bootstrap/InputGroup';
-import Row from 'react-bootstrap/Row';
 import { useRouter } from 'next/navigation';
-import Alert from 'react-bootstrap/Alert'
+import 'bootstrap/dist/css/bootstrap.css';
+import { Alert, Button, Col, Form, Row, InputGroup } from 'react-bootstrap/'
 import logo from "../../public/Resources/logo.jpg"
-
-
+import ToastMessage from '../bootstrap-component/toast';
 
 function RegisterPage() {
 
 
     const router = useRouter();
     const [validated, setValidated] = useState(false);
+    const [message, setMessage] = useState('Nothing');
+    const [showToast, setShowToast] = useState(false)
     const [info, setInfo] = useState({
         firstName: '',
         lastName: '',
         userName: '',
         email: '',
         password: '',
-        passwordConfirm: ''
+        confirmPassword: ''
     });
 
 
@@ -38,6 +34,9 @@ function RegisterPage() {
         if (form.checkValidity() === false) {
             event.preventDefault();
             event.stopPropagation();
+            setMessage("Incorrect input!")
+            setShowToast(true);
+            return;
         }
 
 
@@ -58,22 +57,19 @@ function RegisterPage() {
             if (data.success) {
                 router.push('/home'); // Redirect to home if registration is successful
                 setValidated(true);
+                setMessage(data.message);
                 console.log("SUCCESS");
 
             } else {
                 setValidated(false);
                 console.log("Failed");
             }
-            // setInfo({
-            //     firstName: '',
-            //     lastName: '',
-            //     userName: '',
-            //     email: '',
-            //     password: '',
-            //     passwordConfirm: ''
 
-            // })
         } catch (err) {
+
+            setMessage("This email is taken")
+            setShowToast(true);
+
             console.log("ERROR with /auth/register ", err);
         }
     }
@@ -81,6 +77,21 @@ function RegisterPage() {
     return (
 
         <>
+
+            <div>
+                <ToastMessage text={message} show={showToast} onClose={() => setShowToast(false)} />
+            </div>
+
+            {/* <div>
+
+                {
+                    (popMessage) && (
+                        <Alert variant='danger'>
+                            {message}
+                        </Alert>
+                    )
+                }
+            </div> */}
 
             <div className="d-flex justify-content-center align-items-center my-6">
                 <Form noValidate validated={validated} onSubmit={handleSubmit}>
@@ -208,12 +219,12 @@ function RegisterPage() {
                                 type="password"
                                 placeholder="Confirm Password"
                                 required
-                                value={info.passwordConfirm}
+                                value={info.confirmPassword}
                                 onChange={(event) => {
                                     const data = event.target.value;
                                     setInfo((prev) => ({
                                         ...prev,
-                                        passwordConfirm: data,
+                                        confirmPassword: data,
                                     }));
                                 }}
                             />

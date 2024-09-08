@@ -57,6 +57,6 @@ export const Item = ({ link, desc, name, image, price, chatlink, heart }) => {
                     </button>
                 </div>
             </div>
-        </div >
+        </div>
     );
 }

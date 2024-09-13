@@ -54,7 +54,9 @@ function RegisterPage() {
             const res = await axios.post("http://localhost:8080/auth/register", { info })
 
             const data = res.data;
+
             if (data.success) {
+                localStorage.setItem("token", res.data.token);
                 router.push('/home'); // Redirect to home if registration is successful
                 setValidated(true);
                 setMessage(data.message);
@@ -62,6 +64,7 @@ function RegisterPage() {
 
             } else {
                 setValidated(false);
+                setMessage(data.message);
                 console.log("Failed");
             }
 

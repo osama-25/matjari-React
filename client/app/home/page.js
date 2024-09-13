@@ -7,17 +7,21 @@ import AdDisplay from "./AdDisplay";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Button } from "react-bootstrap";
 import axios from "axios";
-
+import checkLogin from "../login/checklogin";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
 export default function Home() {
 
-  async function handleClick() {
+  const router = useRouter();
 
+    useEffect(() => {
+        const checkAuthStatus = async () => {
+            await checkLogin('/home', router);
+        };
 
-    const res = await axios.get("http://localhost:8080/auth/home");
-    console.log(res.data.message);
+        checkAuthStatus();
+    }, [router]);
 
-    // const data = res.data();
-  }
   return (
     <>
       <NavBar />
@@ -25,7 +29,7 @@ export default function Home() {
       <Categories />
       <ItemsDisplay />
 
-      <Button onClick={handleClick}> Testing Something </Button>
+      {/* <Button onClick={handleClick}> Testing Something </Button> */}
     </>
   );
 }

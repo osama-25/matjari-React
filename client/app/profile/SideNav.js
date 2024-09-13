@@ -6,6 +6,7 @@ import React from "react";
 import { IoBagHandleOutline, IoExitOutline, IoInformation } from "react-icons/io5";
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
+import logout from '../login/logout.jsx'
 
 const Button = ({ icon, text, link, onClick }) => {
     return (
@@ -21,17 +22,13 @@ const Button = ({ icon, text, link, onClick }) => {
 const SideNav = () => {
 
     const router = useRouter();
-    async function handleLogout() {
+    function handleLogout() {
 
-        try {
-            const res = await axios.get('http://localhost:8080/auth/logout');
+        console.log("Faisal hani ahmed");
 
-            // router.back('/login');
-            console.log("Loggin out ...");
-        } catch (err) {
-            console.log("Error in loggin out", err);
+        localStorage.removeItem("token");
+        router.push('/login'); // Redirect to the login page
 
-        }
     }
 
     return (
@@ -39,6 +36,7 @@ const SideNav = () => {
             <Button text={'Information'} link={'/profile/info'} icon={<IoInformation />} />
             <Button text={'Store'} link={'/profile/store'} icon={<IoBagHandleOutline />} />
             <Button text={'Log out'} link={'/login'} icon={<IoExitOutline />} onClick={handleLogout} />
+            {/* <Button> <logout>logout</logout></Button> */}
 
         </nav>
     );

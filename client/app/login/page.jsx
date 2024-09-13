@@ -6,29 +6,57 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import ToastMessage from '../bootstrap-component/toast';
 
-
+// import checkLogin from './checklogin';
 export default function LoginPage() {
+
+
     const router = useRouter();
+
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showToast, setShowToast] = useState(false);
 
     const handleShowToast = () => setShowToast(true);
 
-    const checkLogin = async () => {
-        try {
-            // const res = await axios.get('http://localhost:8080/auth/login');
 
 
+    // const checkLogin = async () => {
+    //     try {
+    //         const token = localStorage.getItem("token");
 
-        } catch (err) {
-            console.log("Error checking login status:", err);
-        }
-    };
+    //         if (token) {
+    //             // Check login status by sending the JWT token in the Authorization header
+    //             const res = await axios.post('http://localhost:8080/auth/login', {
+    //                 headers: {
+    //                     Authorization: `Bearer ${token}`
+    //                 }
+    //             });
 
-    useEffect(() => {
-        checkLogin();
-    }, []);
+    //             console.log(res);
+
+    //             if (res.status === 200) {
+    //                 // User is authenticated, redirect to home or another protected page
+    //                 router.push('/home');
+    //             }
+    //             else
+    //                 router.push('/login');
+    //         }
+    //         else {
+    //             router.push('/');
+    //         }
+
+
+    //     } catch (err) {
+    //         console.log("Error checking login status:", err);
+    //     }
+    // };
+
+    // useEffect( () => {
+    //     if ( checkLogin('/home')) {
+    //         router.push('home');
+    //         return;
+    //     }
+    // }, []);
 
     useEffect(() => {
         if (showToast) {
@@ -47,12 +75,14 @@ export default function LoginPage() {
             });
 
             if (res.data.success) {
+                localStorage.setItem("token", res.data.token);
+
                 router.push('/home');
             } else {
                 handleShowToast();
             }
         } catch (err) {
-            
+
             handleShowToast();
             console.log("Error with /auth/login:", err);
         }
